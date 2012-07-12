@@ -13,7 +13,7 @@ if(isset($_POST["nameInput"]) && isset($_POST["twitterInput"]) && isset($_POST["
 	$database -> exec($macSql, array(
 		$userId,
 		"mac",
-		$_POST["macInput"]
+		strtoupper(replace(':','',$_POST["macInput"]))
 	));
 }
 ?>
