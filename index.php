@@ -10,7 +10,7 @@ if(isset($_POST["nameInput"]) && isset($_POST["twitterInput"]) && isset($_POST["
 	$res = $database -> exec($sql, array(
 		$_POST["nameInput"],
 		$homepage,
-		$_POST["twitterInput"]
+		str_replace('@', '' ,$_POST["twitterInput"])
 	));
 	$userId = $database -> lastInsertId ();
 	
