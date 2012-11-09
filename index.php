@@ -20,6 +20,25 @@ if(isset($_POST["nameInput"]) && isset($_POST["twitterInput"]) && isset($_POST["
 		"mac",
 		strtoupper(str_replace('-', '', str_replace(':','',$_POST["macInput"])))
 	));
+
+?>
+
+	<head>
+		<link rel="stylesheet" href="http://current.bootstrapcdn.com/bootstrap-v204/css/bootstrap-combined.min.css" />
+		<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+		<script type="text/javascript" src="http://current.bootstrapcdn.com/bootstrap-v204/js/bootstrap.min.js"></script>
+		<title> Successfully added user </title>
+	</head>
+	<body>
+		<div class="container">
+		<p> user: <?=$_POST["nameInput"]?> </p>
+		<p> mac: <? echo strtoupper(str_replace('-', '', str_replace(':','',$_POST["macInput"]))); ?> </p>
+		</div>
+	</body>
+
+
+<?
+	exit();
 }
 ?>
 <!DOCTYPE html>
@@ -28,6 +47,7 @@ if(isset($_POST["nameInput"]) && isset($_POST["twitterInput"]) && isset($_POST["
 		<link rel="stylesheet" href="http://current.bootstrapcdn.com/bootstrap-v204/css/bootstrap-combined.min.css" />
 		<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
 		<script type="text/javascript" src="http://current.bootstrapcdn.com/bootstrap-v204/js/bootstrap.min.js"></script>
+		<title> Add user/mac </title>
 	</head>
 	<body>
 		<div class="container">
