@@ -2,9 +2,14 @@
 require_once("config.php");
 header("Content-Type: text/html; charset=utf-8");
 if(isset($_POST["nameInput"]) && isset($_POST["twitterInput"]) && isset($_POST["macInput"])) {
-	$sql = "INSERT INTO users(name, url, twitter) VALUES(?, '', ?)";
+	$homepage = "";
+
+	if (!empty($_POST["homepageInput"])) $homepage = $_POST["homepageInput"];
+
+	$sql = "INSERT INTO users(name, url, twitter) VALUES(?, ?, ?)";
 	$res = $database -> exec($sql, array(
 		$_POST["nameInput"],
+		$homepage,
 		$_POST["twitterInput"]
 	));
 	$userId = $database -> lastInsertId ();
@@ -13,7 +18,7 @@ if(isset($_POST["nameInput"]) && isset($_POST["twitterInput"]) && isset($_POST["
 	$database -> exec($macSql, array(
 		$userId,
 		"mac",
-		strtoupper(str_replace(':','',$_POST["macInput"]))
+		strtoupper(str_replace('-', '', str_replace(':','',$_POST["macInput"])))
 	));
 }
 ?>
@@ -42,7 +47,14 @@ if(isset($_POST["nameInput"]) && isset($_POST["twitterInput"]) && isset($_POST["
 					<input type="text" class="input-xlarge" id="input02" name="twitterInput" />
 				  </div>
 				</div>
-				
+
+				<div class="control-group">
+				  <label class="control-label" for="input02">homepage ?</label>
+				  <div class="controls">
+					<input type="text" class="input-xlarge" id="input02" name="homepageInput" />
+				  </div>
+				</div>
+			
 				<div class="control-group">
 				  <label class="control-label" for="input03">MAC address ?</label>
 				  <div class="controls">
