@@ -45,6 +45,11 @@ function login($userId, $password) {
 	return FALSE;
 }
 
+function logout($userid) {
+	setcookie('1337h4x0rz', '', 0, '/', 'db.initlab.ludost.net');
+	return TRUE;
+}
+
 // yoda says :
 // filtered must be the id
 // -1 means there is no user with that id
