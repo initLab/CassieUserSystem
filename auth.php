@@ -8,9 +8,10 @@ function is_logged_in() {
 		return FALSE;
 	}
 
-	list($userId, $timeStamp, $hash) = explode("|", $_COOKIE["1337h4x0rz"], 3);
-	
-	if(time() <= $timeStamp && $timeStamp - THIRTY_DAYS /*1 month === 30 days*/ < time()) {
+	list($userId, $ts, $hash) = explode("|", $_COOKIE["1337h4x0rz"], 3);
+	$timeStamp = (int) $ts;
+
+	if(  $timeStamp <= time() && $timeStamp > time() - THIRTY_DAYS /*1 month === 30 days*/ ) {
 		$password = get_password($userId);
 
 		// if there is no user found with that id
@@ -34,8 +35,8 @@ function login($userId, $password) {
 
 	if( $userPassword !== FALSE ){
 		if( crypt($password, $userPassword) === $userPassword ) {
-			$time = time() + THIRTY_DAYS;
-			setcookie('1337h4x0rz', $userId . '|' . $time . '|' . sha1($userId . $time . $userPassword . OVERKILL_SECURITY_CHECK_STRING), $time, '/', 'db.initlab.ludost.net');
+			$time = time();
+			setcookie('1337h4x0rz', $userId . '|' . $time . '|' . sha1($userId . $time . $userPassword . OVERKILL_SECURITY_CHECK_STRING), $time + THIRTY_DAYS, '/', 'db.initlab.ludost.net');
 			return TRUE;
 		}
 	}
