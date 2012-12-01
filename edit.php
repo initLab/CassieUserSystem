@@ -50,6 +50,12 @@ if ( isset($_POST['name']) )
 	}
 }
 
+if (isset($_POST['logout'])) {
+	logout();
+	header("Location: /login.php");
+	exit();
+} 
+
 $user = mysql_fetch_assoc(mysql_query('SELECT name, url, twitter FROM users WHERE id = '. $id));
 $obj_res = mysql_query('SELECT type, value FROM objects WHERE userid = '. $id);
 
@@ -87,6 +93,11 @@ MAC адреси: <a id="addmac" href="javascript:void(0);">Добави пол�
 </table><br />
 
 <input type="submit" value="Обнови" />
+
+<form method="POST">
+<input type="hidden" name="logout" value="вън">
+<input type="submit" value="Изход" />
+</form>
 
 </body>
 </html>
