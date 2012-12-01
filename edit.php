@@ -3,7 +3,7 @@ require_once 'auth.php';
 
 if ( ($id = is_logged_in()) === FALSE )
 {
-	//header('Location: /login.php');
+	header('Location: /login.php');
 	exit;
 }
 ?><!DOCTYPE html>
