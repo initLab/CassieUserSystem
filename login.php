@@ -17,7 +17,7 @@ if ( $userId === FALSE ){
 }
 ?>
 <form method='POST'>
-<p> Username: <input type='text' name='id'></p>
+<p> User id (numeric): <input type='text' name='id'></p>
 <p> Password: <input type='password' name='pass'></p>
 <input type='submit' value="Login">
 </form>
