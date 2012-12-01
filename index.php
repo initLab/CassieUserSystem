@@ -70,8 +70,10 @@ if( $_SERVER['REQUEST_METHOD']=== "POST" ) {
 	</head>
 	<body>
 		<div class="container">
-		<p> user: <?=$_POST["nameInput"]?> </p>
-		<p> mac: <? echo strtoupper(str_replace('-', '', str_replace(':','',$_POST["macInput"]))); ?> </p>
+		<p> user: <?=$name?> </p>
+		<p> userid: <?=$userId?> </p>
+		<p> password: ********* </p>
+		<p> mac: <?=$mac?> </p>
 		</div>
 	</body>
 
