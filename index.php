@@ -1,26 +1,65 @@
 <?php
 require_once("config.php");
 header("Content-Type: text/html; charset=utf-8");
-if(isset($_POST["nameInput"]) && isset($_POST["twitterInput"]) && isset($_POST["macInput"])) {
-	$homepage = "";
 
-	if (!empty($_POST["homepageInput"])) $homepage = $_POST["homepageInput"];
+$errors = array();
 
-	$sql = "INSERT INTO users(name, url, twitter) VALUES(?, ?, ?)";
-	$res = $database -> exec($sql, array(
-		$_POST["nameInput"],
-		$homepage,
-		str_replace('@', '' ,$_POST["twitterInput"])
-	));
-	$userId = $database -> lastInsertId ();
-	
-	$macSql = "INSERT INTO objects(userid, type, value) VALUES(?, ?, ?)";
-	$database -> exec($macSql, array(
-		$userId,
-		"mac",
-		strtoupper(str_replace('-', '', str_replace(':','',$_POST["macInput"])))
-	));
+if( $_SERVER['REQUEST_METHOD']=== "POST" ) {
 
+	if (!isset($_POST["nameInput"])) {
+		array_push($errors, "No name provided");
+	}
+
+	if (!isset($_POST["macInput"])) {
+		array_push($errors, "No mac address provided");
+	}
+
+	if (empty($_POST["password"])) {
+		array_push($errors,  "No password entered");
+	}
+
+	if ($_POST["password"] !== $_POST["password-repeat"]) {
+		array_push($errors, "Passwords don't match");
+	}
+
+	if ( count($errors) === 0 ) {
+
+		$chars = './ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+		$salt = "";
+		for($i=0; $i<16; $i++) 
+			$salt.=$chars[rand(0,63)];
+
+		$password = crypt($_POST["password"],'$5$'.$salt);
+		
+		$homepage = "";
+		if (!empty($_POST["homepageInput"])) 
+			$homepage = htmlspecialchars($_POST["homepageInput"]);
+
+		$twitter = "";
+		if (isset($_POST["twitterInput"])) {
+			$twitter = str_replace('@', '' ,htmlspecialchars($_POST["twitterInput"]));
+		}
+
+		$name = htmlspecialchars($_POST["nameInput"]);
+
+		$sql = "INSERT INTO users(name, url, twitter, password) VALUES(?, ?, ?, ?)";
+		$res = $database -> exec($sql, array(
+			$name,
+			$homepage,
+			$twitter,
+			$password
+		));
+
+		$userId = $database -> lastInsertId ();
+		
+		$mac = strtoupper(str_replace('-', '', str_replace(':','',$_POST["macInput"])));
+
+		$macSql = "INSERT INTO objects(userid, type, value) VALUES(?, ?, ?)";
+		$database -> exec($macSql, array(
+			$userId,
+			"mac",
+			$mac
+		));
 ?>
 
 	<head>
@@ -38,7 +77,9 @@ if(isset($_POST["nameInput"]) && isset($_POST["twitterInput"]) && isset($_POST["
 
 
 <?
-	exit();
+	
+		exit();
+	}
 }
 ?>
 <!DOCTYPE html>
@@ -50,10 +91,17 @@ if(isset($_POST["nameInput"]) && isset($_POST["twitterInput"]) && isset($_POST["
 		<title> Add user/mac </title>
 	</head>
 	<body>
+	<? 
+		foreach ($errors as $err) {
+			echo '<h2>'.$err.'</h2>';
+		} 
+	?>
+
 		<div class="container">
 			<form class="form-horizontal well" action="" method="post">
 			  <fieldset>
 				<legend>Hide yo mama, hide yo name, hide yo MAC</legend>
+
 				<div class="control-group">
 				  <label class="control-label" for="input01">Име ?</label>
 				  <div class="controls">
@@ -88,7 +136,21 @@ if(isset($_POST["nameInput"]) && isset($_POST["twitterInput"]) && isset($_POST["
 					</p>
 				  </div>
 				</div>
-				
+
+				<div class="control-group">
+				  <label class="control-label" for="input02">password ?</label>
+				  <div class="controls">
+					<input type="password" class="input-xlarge" id="input02" name="password" />
+				  </div>
+				</div>
+
+				<div class="control-group">
+				  <label class="control-label" for="input02">repeat password ?</label>
+				  <div class="controls">
+					<input type="password" class="input-xlarge" id="input02" name="password-repeat" />
+				  </div>
+				</div>
+			
 				<div class="form-actions">
 					<button type="submit" class="btn btn-primary">Ready to roll!</button>
 				</div>
